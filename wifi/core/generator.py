@@ -2,10 +2,10 @@ import qrcode
 
 from PIL import Image, ImageDraw
 
+from core.constants import AUTHENTICATION_TYPES
 from url.core import utils
 
 ABSOLUTE_PATH: str = utils.get_absolute_parent_path(__file__)
-AUTHENTICATION_TYPES: tuple = ('WPA', 'WPA2', 'WEP', 'NOPASS')
 QR_OUTPUT: str = ''
 QR_VERSION: int = 1
 QR_BOX_SIZE: int = 10

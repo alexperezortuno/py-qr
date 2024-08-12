@@ -17,3 +17,7 @@ def remove_special_chars(file_name: str) -> str:
 
 def remove_extension(file_name: str) -> str:
     return file_name.split('.')[0]
+
+
+def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    return tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))

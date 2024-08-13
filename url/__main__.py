@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--background', default='FFFFFF', help='Background color of the QR code')
     parser.add_argument('-c', '--center-color', default='FFFFFF', help='Center color of the QR code')
     parser.add_argument('-l', '--left-color', default='E0E0E0', help='Left color of the QR code')
-    parser.add_argument('-r', '--right-color', default='E0E0E0', help='Right color of the QR code')
+    parser.add_argument('-r', '--right-color', default='000000', help='Right color of the QR code')
     parser.add_argument('-e', '--edge-color', default='000000', help='Edge color of the QR code')
     parser.add_argument('-u', '--url', help='URL to encode in the QR code')
     parser.add_argument('-s', '--style',

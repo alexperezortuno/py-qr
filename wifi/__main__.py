@@ -3,6 +3,7 @@ import argparse
 import getpass
 import sys
 
+from core.constants import AUTHENTICATION_TYPES
 from url.core import generator
 
 if __name__ == '__main__':
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--password', help='Password of the network')
     parser.add_argument('-n', '--nopass', action='store_true', help='Whether the network has no password')
     parser.add_argument('-a', '--authentication-type',
-                        choices=generator.AUTHENTICATION_TYPES,
+                        choices=AUTHENTICATION_TYPES,
                         default='WPA2',
                         help='Authentication type of the network')
     parser.add_argument('-t', '--title', default="", help='Title of the QR code')

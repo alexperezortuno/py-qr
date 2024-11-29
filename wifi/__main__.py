@@ -4,7 +4,7 @@ import getpass
 import sys
 
 from core.constants import AUTHENTICATION_TYPES
-from url.core import generator
+from wifi.core import generator
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

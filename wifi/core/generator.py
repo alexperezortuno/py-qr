@@ -3,6 +3,7 @@ import qrcode
 from PIL import Image, ImageDraw
 
 from core.constants import AUTHENTICATION_TYPES
+from core.utils import create_dir_if_not_exists
 from url.core import utils
 
 ABSOLUTE_PATH: str = utils.get_absolute_parent_path(__file__)
@@ -38,7 +39,8 @@ def add_logo(output: str) -> None:
     global IMAGE_LOGO
     global ABSOLUTE_PATH
 
-    main_im = Image.open(f'{ABSOLUTE_PATH}/../output/{output}').convert('RGBA')
+    input_path: str = f'{ABSOLUTE_PATH}/../../input'
+    main_im = Image.open(f'{input_path}/{output}').convert('RGBA')
     foot_im = Image.open(IMAGE_LOGO)
     create_im = Image.new('RGBA',
                           get_new_size(main_im, foot_im),
@@ -50,7 +52,7 @@ def add_logo(output: str) -> None:
     create_im.paste(foot_im,
                     (get_middle_size(main_im.size[0]) - get_middle_size(foot_im.size[0]), create_im.size[1] - foot_im.size[1] - 15),
                     mask=foot_im)
-    create_im.save(f'{ABSOLUTE_PATH}/../output/{output}', 'PNG')
+    create_im.save(f'{ABSOLUTE_PATH}/../../output/{output}', 'PNG')
 
     # # Definir las coordenadas del área donde se va a agregar la imagen al pie
     # x, y = main_im.size[0] - foot_im.size[0], main_im.size[1] - foot_im.size[1]
@@ -70,6 +72,9 @@ def generate_qr(ssid: str, hidden: bool, authentication_type: str, password: str
     global IMAGE_TITLE
     global ABSOLUTE_PATH
 
+    path: str = f'{ABSOLUTE_PATH}/../../output'
+    create_dir_if_not_exists(path)
+
     code = wifi_code(ssid, hidden, authentication_type, password)
     QR_OUTPUT = utils.remove_special_chars(utils.remove_extension(QR_OUTPUT)) + '.png'
     qr = qrcode.QRCode(
@@ -80,7 +85,7 @@ def generate_qr(ssid: str, hidden: bool, authentication_type: str, password: str
     )
     qr.add_data(code)
     qr.print_ascii()
-    qr.make_image().save(f'{ABSOLUTE_PATH}/../output/{QR_OUTPUT}')
+    qr.make_image().save(f'{path}/{QR_OUTPUT}')
 
     if ADD_LOGO:
         add_logo(QR_OUTPUT)

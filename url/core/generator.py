@@ -1,11 +1,6 @@
 import qrcode
 
-from PIL import Image, ImageDraw
-from qrcode.image.styledpil import StyledPilImage
-from qrcode.image.styles.colormasks import SolidFillColorMask, RadialGradiantColorMask, SquareGradiantColorMask, \
-    HorizontalGradiantColorMask
-from qrcode.image.styles.moduledrawers import RoundedModuleDrawer, GappedSquareModuleDrawer, CircleModuleDrawer, \
-    VerticalBarsDrawer, HorizontalBarsDrawer
+from core.utils import create_dir_if_not_exists, get_img_by_style
 
 from url.core import utils
 
@@ -40,7 +35,9 @@ def generate_qr() -> None:
                        box_size=QR_BOX_SIZE,
                        border=QR_BORDER,
                        error_correction=qrcode.constants.ERROR_CORRECT_H)
-    output: str = f'{ABSOLUTE_PATH}/../output/{utils.remove_special_chars(utils.remove_extension(QR_OUTPUT))}.png'
+    path_output: str = f'{ABSOLUTE_PATH}/../../output'
+    create_dir_if_not_exists(path_output)
+    output: str = f'{path_output}/{utils.remove_special_chars(utils.remove_extension(QR_OUTPUT))}.png'
     # Define the data to be encoded in the QR code
     data = QR_URL
 
@@ -51,62 +48,15 @@ def generate_qr() -> None:
     qr.make(fit=True)
 
     # Create an image from the QR code with a black fill color and white background
-    img = None
+    img = get_img_by_style(qr, STYLE, {
+        'fill_color': QR_FILL_COLOR,
+        'back_color': QR_BACKGROUND_COLOR,
+        'left_color': LEFT_COLOR,
+        'right_color': RIGHT_COLOR,
+        'center_color': CENTER_COLOR,
+        'edge_color': EDGE_COLOR,
+    })
 
-    if STYLE.lower() == 'default':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR)
-    if STYLE.lower() == 'rounded':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=RoundedModuleDrawer())
-    if STYLE.lower() == 'gapped':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=GappedSquareModuleDrawer())
-    if STYLE.lower() == 'circle':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=CircleModuleDrawer())
-    if STYLE.lower() == 'hbar':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=HorizontalBarsDrawer())
-    if STYLE.lower() == 'vbar':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=VerticalBarsDrawer())
-    if STYLE.lower() == 'solid':
-        img = qr.make_image(fill_color=QR_FILL_COLOR,
-                            back_color=QR_BACKGROUND_COLOR,
-                            image_factory=StyledPilImage,
-                            module_drawer=SolidFillColorMask())
-    if STYLE.lower() == 'rgradient':
-        img = qr.make_image(image_factory=StyledPilImage,
-                            color_mask=RadialGradiantColorMask(
-                                back_color=QR_BACKGROUND_COLOR,
-                                center_color=CENTER_COLOR,
-                                edge_color=EDGE_COLOR,
-                            ))
-    if STYLE.lower() == 'sgradient':
-        img = qr.make_image(image_factory=StyledPilImage,
-                            color_mask=SquareGradiantColorMask(
-                                back_color=QR_BACKGROUND_COLOR,
-                                center_color=CENTER_COLOR,
-                                edge_color=EDGE_COLOR,
-                            ))
-    if STYLE.lower() == 'hgradient':
-        img = qr.make_image(image_factory=StyledPilImage,
-                            color_mask=HorizontalGradiantColorMask(
-                                back_color=QR_BACKGROUND_COLOR,
-                                left_color=LEFT_COLOR,
-                                right_color=RIGHT_COLOR,
-                            ))
     # Save the QR code image
     if img is not None:
         img.save(output)
